@@ -1,0 +1,82 @@
+# Dev Log
+
+## 2026-09-12 — FBref blocked by Cloudflare; pivoted stats to API-Football
+
+**What:** Confirmed FBref is behind a Cloudflare JavaScript challenge
+(the "Just a moment..." page), not just a basic bot-header check.
+Switched the stats source to API-Football, kept `db_utils.py`
+completely unchanged, and separately confirmed Transfermarkt has no
+such protection — a plain `requests.Session()` with a homepage
+warm-up gets a clean 200. Built and offline-tested
+`scraper/transfermarkt_scraper.py` against Transfermarkt's real
+markup (no `data-stat` attributes here — structural/positional
+parsing instead, with player name+position nested inside an
+inline-table per row).
+
+**Why pivot instead of pushing through with Playwright:** A headless
+browser can solve a JS challenge locally, but GitHub Actions' cloud
+runners share IP ranges Cloudflare already treats with more
+suspicion than a residential IP — so it likely wouldn't run reliably
+unattended anyway. Since the whole point of this project is
+automated freshness, I picked reliability over sticking with FBref.
+API-Football's free tier (100 req/day) comfortably covers a full
+league pull (~28 requests, paginated 20/page).
+
+**Why db_utils.py didn't need to change:** It was written to expect
+a generic `{name, nationality, position, stats}` shape, not anything
+FBref-specific. Persistence being separate from fetching/parsing
+meant swapping data sources was a new file, not a rewrite.
+
+**What I learned:** A 403 isn't always "bot detected" — it can mean
+several different things (missing headers, rate limiting, or a full
+JS challenge), and the fix is different for each. The diagnostic
+step (checking response body content, not just status code) is what
+told them apart here. Also: don't assume two sites with similar
+purposes have similar bot protection — testing each independently
+mattered.
+
+**Open question / next up:** Entity resolution between API-Football
+and Transfermarkt player IDs — same problem as before, different
+source pair. Also need to confirm whether Transfermarkt's "top
+market values" page covers full squads by position or just the
+highest-valued subset league-wide, which affects whether it's
+sufficient on its own or needs per-club squad pages instead.
+
+---
+
+## 2026-09-08 — Schema + FBref scraper
+
+**What:** Finalized the DB schema (long/tidy stats table, separate
+valuations table, `source_ids` for cross-site entity resolution) and
+built the FBref scraper for Premier League standard stats. Split it
+into `scraper/fbref_scraper.py` (fetch + parse) and
+`scraper/db_utils.py` (persistence), orchestrated from `main.py`.
+
+**Why long/tidy over wide:** A goalkeeper's stats and a striker's
+stats barely overlap. Wide columns meant mostly-NULL rows and a
+schema migration every time I wanted to track a new stat. Long/tidy
+trades query convenience for flexibility — I pivot to wide only at
+feature-engineering time, right before modeling.
+
+**Why snapshots instead of overwrite:** Overwriting loses history.
+The whole "stays fresh for transfer windows" claim only works if I
+can show a value/stat trend over time, not just a single current
+number.
+
+**Why the db file is committed, not gitignored:** The automation
+story only proves itself if the scheduled scrape visibly updates the
+repo. A gitignored database means the freshness is invisible.
+
+**What I learned:** FBref tags every stat cell with a `data-stat`
+attribute, which sidesteps fragile header-text parsing entirely.
+Also learned some FBref tables are hidden inside HTML comments
+because they're normally rendered client-side — first time I've had
+to scrape around that.
+
+**Open question / next up:** Entity resolution between FBref and
+Transfermarkt IDs — different sites, no shared key, name spellings
+won't always match exactly.
+
+---
+
+

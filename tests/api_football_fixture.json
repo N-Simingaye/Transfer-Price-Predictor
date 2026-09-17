@@ -1,0 +1,27 @@
+{
+  "paging": {"current": 1, "total": 1},
+  "response": [
+    {
+      "player": {"id": 1100, "name": "Test Striker", "nationality": "England"},
+      "statistics": [
+        {
+          "games": {"appearences": 5, "minutes": 450, "position": "Attacker"},
+          "goals": {"total": 4, "assists": 1}
+        }
+      ]
+    },
+    {
+      "player": {"id": 1101, "name": "Test Defender", "nationality": "France"},
+      "statistics": [
+        {
+          "games": {"appearences": 6, "minutes": 540, "position": "Defender"},
+          "goals": {"total": 0, "assists": 0}
+        }
+      ]
+    },
+    {
+      "player": {"id": 1102, "name": "No Stats Player", "nationality": "Spain"},
+      "statistics": []
+    }
+  ]
+}
