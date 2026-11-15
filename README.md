@@ -99,8 +99,8 @@ that investigation, not because it's currently used.
 
 Early design mockups for the planned interface (not built yet).
 
-![Position view](docs/design/PositionView.png)
-![Team view](docs/design/team-view.png)
-![Player page](docs/design/player-page.png)
-![Player hover card](docs/design/hover-card-virgil-van-dijk.png)
-![Player hover card](docs/design/hover-card-ruben-dias.png)
+![Position view](https://github.com/N-Simingaye/Transfer-Price-Predictor/blob/main/docs/design/Position%20view.png)
+![Team view](https://github.com/N-Simingaye/Transfer-Price-Predictor/blob/main/docs/design/Team%20view.png)
+![Player page](https://github.com/N-Simingaye/Transfer-Price-Predictor/blob/main/docs/design/Player%20page.png)
+![Player hover card](docs/design/Hover%20card%20%C2%B7%20R%C3%BAben%20Dias.png))
+![Player hover card](docs/design/Hover%20card%20%C2%B7%20Virgil%20van%20Dijk.png)
