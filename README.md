@@ -94,3 +94,13 @@ unreliable running unattended on GitHub Actions' cloud IPs, which
 Cloudflare treats with extra suspicion. See DEVLOG.md for the full
 story — `scraper/fbrefscraper.py` is kept in the repo as a record of
 that investigation, not because it's currently used.
+
+## Interface concept
+
+Early design mockups for the planned interface (not built yet).
+
+![Position view](docs/design/PositionView.png)
+![Team view](docs/design/team-view.png)
+![Player page](docs/design/player-page.png)
+![Player hover card](docs/design/hover-card-virgil-van-dijk.png)
+![Player hover card](docs/design/hover-card-ruben-dias.png)
